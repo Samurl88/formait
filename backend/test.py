@@ -8,6 +8,7 @@ import re
 import json
 json_regex = r'\{.*?\}'
 import json
+from pdf2image import convert_from_path
 from openpyxl import load_workbook
 
 def convertToTemplate():
@@ -26,7 +27,9 @@ def convertToTemplate():
         "date": (8, 5),
         "bill to": (10, 5),
         "ship to":(14, 5),
-        "PO#": (20, )
+        "PO#": (20, 5),
+        "production date": (21, 5),
+
     }
     
     
@@ -46,9 +49,41 @@ def convertToTemplate():
         "date": string,
         "bill to": string (with line breaks),
         "ship to":string (with line breaks),
+        "PO#": string,
+        "production date": string,
+        "expected date": string,
+        "quantities": [
+            quantity of cases of 8/64 oz Suntropics Mango Nectar,
+            quantity of cases of 8/64 oz Suntropics Guava Nectar,
+            quantity of cases of 8/64 oz  Suntropics Calamansi -,
+            quantity of cases of 8/64 oz  Suntropics Passion OJ Guava 100% Juice
+        ],
+        "item numbers": [
+            item number of 8/64 oz Suntropics Mango Nectar,
+            item number of 8/64 oz Suntropics Guava Nectar,
+            item number of 8/64 oz  Suntropics Calamansi -,
+            item number of 8/64 oz  Suntropics Passion OJ Guava 100% Juice
+        ],
+        costs: [
+            cost of 8/64 oz Suntropics Mango Nectar,
+            cost of 8/64 oz Suntropics Guava Nectar,
+            cost of 8/64 oz  Suntropics Calamansi -,
+            cost of 8/64 oz  Suntropics Passion OJ Guava 100% Juice
+        ],
+        totalCosts: [
+            total cost of 8/64 oz Suntropics Mango Nectar,
+            total cost of 8/64 oz Suntropics Guava Nectar,
+            total cost of 8/64 oz  Suntropics Calamansi -,
+            total cost of 8/64 oz  Suntropics Passion OJ Guava 100% Juice
+        ],
+        totalQuantity: integer,
+        netCost: integer in dollars
+        
+        "
     }"""
 
     response = str(chain.run(input_documents=documents, question=question))
+    print(response)
     json_match = re.search(json_regex, response, re.DOTALL)
     responseJson = json.loads(json_match.group(0))
     print(responseJson)
@@ -62,6 +97,26 @@ def convertToTemplate():
     for i in range(len(addresses)):   
         sheet.cell(row=14 + i, column=5).value = addresses[i]
 
+    sheet.cell(row=20, column=5).value = responseJson["PO#"]
+    sheet.cell(row=21, column=5).value = responseJson["production date"]
+    sheet.cell(row=23, column=5).value = responseJson["expected date"]
+
+    #quantities and stuff
+
+    for i in range(4):
+        sheet.cell(row=26+i, column=1).value = responseJson["quantities"][i]
+
+    for i in range(4):
+        sheet.cell(row=26+i, column=3).value = responseJson["item numbers"][i]
+    
+    for i in range(4):
+        sheet.cell(row=26+i, column=6).value = responseJson["costs"][i]
+
+    for i in range(4):
+        sheet.cell(row=26+i, column=7).value = responseJson["totalCosts"][i]
+
+    sheet.cell(row=30, column=1).value = responseJson["totalQuantity"]
+    sheet.cell(row=30, column=7).value = responseJson["netCost"]
     workbook.save("test.xlsx")
 
 convertToTemplate()
