@@ -1,0 +1,43 @@
+VENDOR,49204808
+COMPANY NAME,SUN TROPICS INC
+PO BOX,407
+CITY,San Ramon
+STATE,CA
+ZIP CODE,94583
+
+PURCHASE ORDER,P.O.#,TYPE,TERMS,LEAD,DC#,PAGE,DATE,1% 10 NET 15
+,P.O.#,MA,,,45,1000,8/01/24
+
+CONTACT DETAILS
+Phone Number,(925)202-2221
+Payee,44033995
+,Company,SUN TROPICS INC
+Bill to Contact,KeHE Distributors, LLC
+,Address,4055 Deerpark Blvd
+,City,Elkton
+,State,FL
+,Zip Code,32033
+
+SHIP TO DETAILS
+Customer PO#,KEHE DISTRIBUTORS
+Ship to Address,456 Destiny Road
+,City,San Diego
+,State,CA
+,Zip Code,92104
+Attention,Accounts Payable
+Email Address,Jane.Doe@KEHE.COM
+Email Confirmation,POCONFIRMATION@KEHE.COM
+
+ORDER DETAILS
+Estimated Pick Up Date,Item#,MFG Item#,Brand/Description,Size,Pack,Qty,Expected Delivery Date,Jobber Cost
+,,00112770,10068,00829354100682 EA,,1200,08/19/2024,450.00
+
+TOTALS
+Lines Ordered,1
+Total Cases,150
+Total Weight,5568.000
+Cube,116.640
+Gross Cost,67500.00
+Mfr Allow,1350.00
+Net Cost,66150.00
+Extended Cost,67500.00
