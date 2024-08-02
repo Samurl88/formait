@@ -4,26 +4,32 @@ from langchain.chains.question_answering import load_qa_chain
 import xlrd  
 import csv 
 import pandas as pd 
+import re
+import json
+json_regex = r'\{.*?\}'
+import json
+from openpyxl import load_workbook
 
 def convertToTemplate():
     # read an excel file and convert  
     # into a dataframe object 
-    df = pd.DataFrame(pd.read_excel("./template.xlsx")) 
+    workbook = load_workbook(filename="template.xlsx")
+    sheet = workbook.active
+    print(sheet.cell(row=8, column=2).value)
+    replaceCoords = []
+    for y in range(sheet.max_row):
+        for x in range(sheet.max_column):
+            if sheet.cell(row=y + 1, column=x + 1).value == "REPLACE":
+                replaceCoords.append((y + 1, x + 1))
+    print(replaceCoords)
+    templateDictionary = {
+        "date": (8, 5),
+        "bill to": (10, 5),
+        "ship to":(14, 5),
+        "PO#": (20, )
+    }
     
-    # show the dataframe 
-    # print(df)
-    for row in df:
-        print(row)
-    # df.to_csv('out.csv', index=False)  
-    with open('out.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        field = ["name", "age", "country"]
-        
-        writer.writerow(field)
-        writer.writerow(["Oladele Damilola", "40", "Nigeria"])
-        writer.writerow(["Alina Hricko", "23", "Ukraine"])
-        writer.writerow(["Isabel Walter", "50", "United Kingdom"])
-    return
+    
     #Locate your PDF here.
 
 
@@ -35,9 +41,27 @@ def convertToTemplate():
     # api_key = "sk-?????"
     llm = OpenAI(model_name="gpt-4o")
     chain = load_qa_chain(llm,verbose=True)
-    question = "Make a csv file with data from this pdf"
-    response = chain.run(input_documents=documents, question=question)
+    question = """With this pdf, find the date, billing address, and shipping address. Output your answer only in the following JSON format: 
+    templateDictionary = {
+        "date": string,
+        "bill to": string (with line breaks),
+        "ship to":string (with line breaks),
+    }"""
 
-    print(response)
+    response = str(chain.run(input_documents=documents, question=question))
+    json_match = re.search(json_regex, response, re.DOTALL)
+    responseJson = json.loads(json_match.group(0))
+    print(responseJson)
+    sheet.cell(row=8, column=5).value = responseJson["date"]
+    #split addresses
+    addresses = responseJson["bill to"].split("\n")
+    for i in range(len(addresses)):   
+        sheet.cell(row=10 + i, column=5).value = addresses[i]
+
+    addresses = responseJson["ship to"].split("\n")
+    for i in range(len(addresses)):   
+        sheet.cell(row=14 + i, column=5).value = addresses[i]
+
+    workbook.save("test.xlsx")
 
 convertToTemplate()
