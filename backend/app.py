@@ -14,6 +14,20 @@ import json
 import re
 from langchain.chains.question_answering import load_qa_chain
 from langchain.document_loaders import PyPDFLoader
+import pdfkit
+import io
+
+
+firebaseConfig = {
+    "apiKey": "AIzaSyAtaQ-CtxxdiA0Z0OvIFArbVc4KeEk1Zao",
+    "authDomain": "formait-d9d40.firebaseapp.com",
+    "projectId": "formait-d9d40",
+    "storageBucket": "formait-d9d40.appspot.com",
+    "messagingSenderId": "602342721783",
+    "appId": "1:602342721783:web:3fdfc09a3aa9b69632ebf2",
+    "measurementId": "G-J81R8NRCDS"
+}
+
 json_regex = r'\{.*?\}'
 
 client = OpenAI()
@@ -21,30 +35,14 @@ client = OpenAI()
 app = Flask(__name__)
 CORS(app)
 
-# def sendToLLM2(pdf):
-#     #Load the PDF
-#     loader = PyPDFLoader(pdf)
-#     documents = loader.load()
-
-#     api_key = "sk-?????"
-#     llm = OpenAI(openai_api_key=api_key)
-#     chain = load_qa_chain(llm,verbose=True)
-#     question = input("Enter your question here : ")
-#     response = chain.run(input_documents=documents, question=question)
-#     print(response) 
-#     return response
-# def sendToLLM(data):
-#     completion = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=[
-#         {"role": "user", "content": data}
-#     ]
-#     )
-#     return str(completion.choices[0].message.content)
-
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+def getTemplateRequirements(excel):
+    df = pd.read_excel(excel)
+    df.to_html(excel)
+    pdfkit.from_file(excel, "excel.pdf")
 
 def convertTemplate3(bytes):
     workbook = load_workbook(filename="template.xlsx")
@@ -164,11 +162,19 @@ def convertTemplate3(bytes):
 
 @app.route("/", methods=['POST', "GET"])
 def hello_world():
+    print("EEEEEFFFF")
     pdf = request.files['pdf']
     template = request.files['template']
 
-    # print(pdf.read())
+    json_data = request.form.get('num')
+    num = None
+    print(json_data)
+    if json_data:
+        json_data = json.loads(json_data)
+        num = json_data['num']
     
+    print(num)
+
     convertTemplate3(pdf.read())
 
     if pdf and template:

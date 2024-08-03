@@ -19,6 +19,8 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
+def convertTemplate4():
+    
 
 def convertTemplate3():
     workbook = load_workbook(filename="template.xlsx")

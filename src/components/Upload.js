@@ -1,13 +1,20 @@
 import '../App.css';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Upload.css'
 import axios from 'axios';
 import { Document, pdfjs, Page } from 'react-pdf'
 import { TbTriangleFilled } from "react-icons/tb";
 import { PuffLoader } from 'react-spinners';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
+import { auth } from '../firebase/firebase';
+import { useNavigate } from "react-router-dom";
+import { getDatabase, ref, update, get, child } from "firebase/database";
+
 
 function App() {
+  const db = getDatabase();
+  
+  const navigate = useNavigate();
   const [pdf, setPDF] = useState(null);
   const [pdfTitle, setPDFTitle] = useState(null);
   const [template, setTemplate] = useState(null);
@@ -17,17 +24,47 @@ function App() {
   const [returnedFile, setReturnedFile] = useState(null)
 
 
+
+
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])
 
   const [download, setDownload] = useState(null)
 
+  useEffect(() => {
+    if (!auth.currentUser) {
+      navigate("/login");
+    }
+  })
+  
   const sendData = async () => {
+    let uid = auth.currentUser.uid || "error"
+
+
+    let num;
+
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `/${uid}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        num = snapshot.val().num;
+      } else {
+        update(ref(db, `/${uid}`), {
+          num: 0
+        })
+        num = 0
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+
 
     setLoading(true)
     const formData = new FormData();
     formData.append('pdf', pdf);
     formData.append('template', template)
+    formData.append('num', JSON.stringify({ num: 1 }));
 
     const response = await axios.post('http://127.0.0.1:5000/', formData, {
       headers: {
@@ -96,9 +133,6 @@ function App() {
       }
     }
   };
-
-  console.log(rows)
-  console.log(columns)
 
   function downloadFile() {
     var a = document.createElement('a');
