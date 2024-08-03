@@ -41,3 +41,92 @@
     opacity: 0;
     cursor: pointer;
 }
+
+.disabledBtn {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(238, 234, 255);
+    border-radius: 10px;
+    transition: all 0.4s
+}
+
+.btn {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(194, 183, 250);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 lightgray, 0 6px 20px 0 lightgray;
+    transition: all 0.4s;
+}
+
+.loadingBtn {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(194, 183, 250);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 lightgray, 0 6px 20px 0 lightgray;
+    transition: all 0.4s;
+}
+
+.btn:hover {
+    background-color: rgb(178, 164, 249);
+    transform: scale(1.1);
+}
+
+.noSpreadsheet {
+    border: 3px dashed rgb(217, 210, 244);
+    width: 40vw;
+    height: 70vh;
+    border-radius: 15px;
+    display: flex; 
+    text-align: center;
+    padding: 30px;
+    justify-content: center;
+    align-items: center;
+    /* transition: all 0.4s; */
+}
+
+.yesSpreadsheet {
+    border: 3px solid rgb(217, 210, 244);
+    width: 40vw;
+    height: 70vh;
+    display: flex; 
+    text-align: center;
+    overflow: scroll;
+    /* transition: all 0.4s; */
+}
+
+.activeExport {
+    background-color: rgb(194, 183, 250);
+    padding: 15px 50px;
+    font-size: 25px;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: background-color 0.4s, transform 0.4s;
+    align-self: center;
+}
+
+.activeExport:hover {
+    background-color: rgb(178, 164, 249);
+    transform: scale(1.1);
+}
+
+.disabledExport {
+    background-color: rgb(238, 234, 255);
+    padding: 15px 50px;
+    font-size: 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: background-color 0.4s, transform 0.4s;
+    align-self: center;
+    color: lightgray
+}

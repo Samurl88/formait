@@ -1,0 +1,36 @@
+.navbar-text {
+    /* font-family: "InterRegular"; */
+    font-size: 18px;
+    text-decoration: none;
+    color: black;
+    transition: all 0.2s linear;
+}
+
+#navbar a.active {
+    color: black;
+}
+
+#navbar {
+    /* background-color: rgba(178, 147, 255, 0.6); */
+    display: flex;
+    gap: 50;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0px;
+    z-index: 100;
+    transition: background-color 0.4s linear;
+
+    border-bottom: 1px solid rgb(179, 163, 250);
+}
+
+#navbar a:hover {
+    color: black;
+}
+
+.navbar-title {
+    /* font-family: "InterMedium"; */
+    font-size: 24px;
+    text-decoration: none;
+    color: var(--navbar-text-active);
+    transition: all 0.2s linear;
+}
