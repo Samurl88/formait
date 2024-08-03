@@ -20,6 +20,8 @@ function App() {
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])
 
+  const [download, setDownload] = useState(null)
+
   const sendData = async () => {
 
     setLoading(true)
@@ -37,6 +39,11 @@ function App() {
     setLoading(false)
 
     console.log('File uploaded successfully:', response.data)
+
+    const link = URL.createObjectURL(response.data)
+
+    console.log(link)
+    setDownload(link)
 
     ExcelRenderer(response.data, (err, resp) => {
       if (err) {
@@ -93,6 +100,15 @@ function App() {
   console.log(rows)
   console.log(columns)
 
+  function downloadFile() {
+    var a = document.createElement('a');
+    a.download = "completed";
+    a.href = download;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
   return (
     <div style={{ width: "100vw", height: "90vh", padding: "30px 10px", display: "flex", flexDirection: "column" }}>
       <div style={{ fontSize: "40px", textAlign: "center", fontWeight: "bold", marginBottom: 70 }}>Convert PO to Excel Sheet</div>
@@ -136,11 +152,11 @@ function App() {
         <div style={{ display: "flex", gap: "30px", flexDirection: "column", height: "100%", justifyContent: "center", flex: 1, alignItems: "flex-start", }}>
           <div className={rows.length ? "yesSpreadsheet" : "noSpreadsheet"}>
             {rows.length
-              ? <OutTable data={rows} columns={columns} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />
+              ? <OutTable data={rows} columns={columns} tableClassName="ExcelTable" tableHeaderRowClass="heading" />
               : <p style={{ color: "rgb(196, 181, 255)", fontStyle: "italic", fontSize: "20px", }}>Completed spreadsheet will appear here.</p>
             }
           </div>
-          <div className={rows.length ? "activeExport" : "disabledExport"}>Export</div>
+          <a onClick={downloadFile} className={rows.length ? "activeExport" : "disabledExport"} download="completed.xlsx">Export</a>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import "./Navbar.css"
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Upload from "./components/Upload"
-import { FaRegSmile } from 'react-icons/fa';
+import Login from './components/Login';
 
 
 function App() {
@@ -22,12 +22,15 @@ function App() {
             <div style={{ display: "flex", gap: "50px" }}>
               <NavLink to="/" className={"navbar-text"}>Home</NavLink>
               <NavLink to="/convert" className={"navbar-text"}>Convert</NavLink>
+              <NavLink to="/login" className={"navbar-text"}>Login</NavLink>
             </div>
           </div>
         </div>
       </nav>
+
       <Routes>
         <Route path="/" element={<Upload />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

@@ -157,6 +157,7 @@ def convertTemplate3(bytes):
 
     sheet.cell(row=30, column=1).value = totalQuantity
     sheet.cell(row=30, column=7).value = totalCost
+    workbook.title = "completed"
     workbook.save("test.xlsx")
 
 
@@ -169,7 +170,6 @@ def hello_world():
     # print(pdf.read())
     
     convertTemplate3(pdf.read())
-    time.sleep(1)
 
     if pdf and template:
         return send_file('./test.xlsx', attachment_filename="completed.xlsx")

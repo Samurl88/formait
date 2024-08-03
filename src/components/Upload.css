@@ -113,6 +113,8 @@
     font-weight: 600;
     transition: background-color 0.4s, transform 0.4s;
     align-self: center;
+    text-decoration: none;
+    color: black;
 }
 
 .activeExport:hover {
@@ -123,10 +125,12 @@
 .disabledExport {
     background-color: rgb(238, 234, 255);
     padding: 15px 50px;
-    font-size: 20px;
+    font-size: 25px;
     border-radius: 20px;
-    font-weight: bold;
+    font-weight: 600;
     transition: background-color 0.4s, transform 0.4s;
     align-self: center;
-    color: lightgray
+    color: lightgray;
+    text-decoration: none;
+
 }
