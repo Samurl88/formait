@@ -72,3 +72,25 @@
 	font-weight: bold;
   display: none;
 }
+
+
+.startBtn {
+  background-color: rgb(194, 183, 250);
+  padding: 15px 30px;
+  font-size: 25px;
+  border-radius: 15px;
+  font-weight: 600;
+  transition: background-color 0.4s, transform 0.4s;
+  align-self: center;
+  text-decoration: none;
+  color: black;
+}
+
+.startBtn:hover {
+  background-color: rgb(178, 164, 249);
+  transform: scale(1.1);
+}
+
+.active {
+  font-weight: bold;
+}

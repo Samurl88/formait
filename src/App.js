@@ -8,6 +8,9 @@ import { auth } from './firebase/firebase';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Upload from "./components/Upload"
 import Login from './components/Login';
+import Home from "./components/Home"
+
+import ordermatic from "./assets/ordermatic.png"
 
 
 function App() {
@@ -15,9 +18,9 @@ function App() {
     <BrowserRouter>
       
       <nav id="navbar">
-        <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", width: "90vw", gap: "75px" }}>
+        <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-end", width: "95vw", gap: "50px" }}>
           <Link to="/" className="navbar-title" id="ee" style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-            <div>FORMaiT</div>
+            <img src={ordermatic} width="200px" style={{}}></img>
           </Link>
           <div style={{  }}>
             <div style={{ display: "flex", gap: "50px" }}>
@@ -34,16 +37,18 @@ function App() {
             }}>
               <NavLink to="/login" className={"navbar-text"} onClick={() => {
                 auth.signOut()
-              }}>Logout</NavLink>
+              }}>{auth?.currentUser ? "Log Out" : "Log In"}</NavLink>
             </div>
           </div>
         </div>
       </nav>
       
       <Routes>
-        <Route path="/" element={<Upload />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/convert" element={<Upload />} />
+        
       </Routes>
     </BrowserRouter>
   );

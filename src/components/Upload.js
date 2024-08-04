@@ -40,58 +40,65 @@ function App() {
   const sendData = async () => {
     let uid = auth.currentUser.uid || "error"
 
+    setLoading(true)
 
-    let num;
+    let num = 0;
 
     const dbRef = ref(getDatabase());
-    get(child(dbRef, `/${uid}`)).then((snapshot) => {
+    get(child(dbRef, `/${uid}`)).then( async (snapshot) => {
       if (snapshot.exists()) {
         console.log(snapshot.val());
         num = snapshot.val().num;
+
+        update(ref(db, `/${uid}`), {
+          num: num + 1
+        })
       } else {
         update(ref(db, `/${uid}`), {
-          num: 0
+          num: 1
         })
         num = 0
       }
+      console.log(num)
+
+
+      const formData = new FormData();
+      formData.append('pdf', pdf);
+      formData.append('template', template)
+      formData.append('num', JSON.stringify({ num: num }));
+  
+      const response = await axios.post('http://127.0.0.1:5000/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        responseType: "blob"
+      });
+  
+      setLoading(false)
+  
+      console.log('File uploaded successfully:', response.data)
+  
+      const link = URL.createObjectURL(response.data)
+  
+      console.log(link)
+      setDownload(link)
+  
+      ExcelRenderer(response.data, (err, resp) => {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          setColumns(resp.cols)
+          setRows(resp.rows)
+          console.log("Done!")
+        }
+      })
+
     }).catch((error) => {
       console.error(error);
     });
 
 
-
-    setLoading(true)
-    const formData = new FormData();
-    formData.append('pdf', pdf);
-    formData.append('template', template)
-    formData.append('num', JSON.stringify({ num: 1 }));
-
-    const response = await axios.post('http://127.0.0.1:5000/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      responseType: "blob"
-    });
-
-    setLoading(false)
-
-    console.log('File uploaded successfully:', response.data)
-
-    const link = URL.createObjectURL(response.data)
-
-    console.log(link)
-    setDownload(link)
-
-    ExcelRenderer(response.data, (err, resp) => {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        setColumns(resp.cols)
-        setRows(resp.rows)
-        console.log("Done!")
-      }
-    })
   }
 
   const handleFileChange = (e) => {
@@ -145,7 +152,7 @@ function App() {
 
   return (
     <div style={{ width: "100vw", height: "90vh", padding: "30px 10px", display: "flex", flexDirection: "column" }}>
-      <div style={{ fontSize: "40px", textAlign: "center", fontWeight: "bold", marginBottom: 70 }}>Convert PO to Excel Sheet</div>
+      <div style={{ fontSize: "35px", textAlign: "left", fontWeight: 600, marginBottom: 30, marginLeft: 40 }}>Convert PO to Excel Sheet</div>
       <div style={{ flex: 1, display: "flex", width: "90%", alignSelf: "center", }}>
         <div style={{ display: "flex", gap: "100px", flexDirection: "column", height: "100%", justifyContent: "center", alignItems: "flex-start", }}>
           <div className="parent">

@@ -36,7 +36,9 @@ export default function Login() {
                       width: "250px",
                       position: "absolute",
                       left: "75px",
-                      height: "40px"
+                      height: "40px",
+                      borderRadius: "10px"
+
                   }}
               />
               <input
@@ -49,6 +51,7 @@ export default function Login() {
                       left: "75px",
                       top: "200px",
                       height: "40px",
+                      borderRadius: "10px"
                       
                   }}
               />
@@ -75,7 +78,7 @@ export default function Login() {
         onClick={() => {
             signInWithEmailAndPassword(auth, email, password).then(() => {
                 console.log("succesfully logged in")
-                navigate("/")
+                navigate("/convert")
             }).catch((e) => {
                 setError("Incorrect email or password")
                 console.log("wrong password or email")
@@ -85,7 +88,7 @@ export default function Login() {
         style={{
             position: "absolute",
             left: "65px",
-            top: "330px"
+            top: "350px"
         }}
         >Don't have an account? Register here</a>
         </div>

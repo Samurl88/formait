@@ -5,13 +5,15 @@ from openpyxl import load_workbook
 from pdf2image import convert_from_path
 from io import BytesIO
 import base64
+from spire.xls import *
+from spire.xls.common import *
 import json
 import re
 from langchain.chains.question_answering import load_qa_chain
 from langchain.document_loaders import PyPDFLoader
 # from langchain.llms import OpenAI
 import openai
-client = openai.OpenAI()
+# client = openai.OpenAI()
 json_regex = r'\{.*?\}'
 
 
@@ -20,7 +22,15 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 def convertTemplate4():
-    
+    workbook = Workbook()
+    workbook.LoadFromFile("template.xlsx")
+    for sheet in workbook.Worksheets:
+        fileName =  sheet.Name + ".png"
+        #Save each worksheet to a PNG image
+        image = sheet.ToImage(sheet.FirstRow, sheet.FirstColumn, sheet.LastRow, sheet.LastColumn)
+        image.Save(fileName)
+
+    workbook.Dispose()
 
 def convertTemplate3():
     workbook = load_workbook(filename="template.xlsx")
@@ -310,4 +320,4 @@ def convertToTemplate():
 
 
 # convertToTemplate()
-convertTemplate3()
+convertTemplate4()

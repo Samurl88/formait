@@ -44,7 +44,7 @@ def getTemplateRequirements(excel):
     df.to_html(excel)
     pdfkit.from_file(excel, "excel.pdf")
 
-def convertTemplate3(bytes):
+def convertTemplate3(bytes, num):
     workbook = load_workbook(filename="template.xlsx")
     sheet = workbook.active
     image = convert_from_bytes(bytes)[0]
@@ -155,6 +155,10 @@ def convertTemplate3(bytes):
 
     sheet.cell(row=30, column=1).value = totalQuantity
     sheet.cell(row=30, column=7).value = totalCost
+
+    formatted_num = "{:04d}".format(num)
+    sheet.cell(row=8, column=7).value = f"ST-{formatted_num}"
+
     workbook.title = "completed"
     workbook.save("test.xlsx")
 
@@ -175,7 +179,7 @@ def hello_world():
     
     print(num)
 
-    convertTemplate3(pdf.read())
+    convertTemplate3(pdf.read(), num)
 
     if pdf and template:
         return send_file('./test.xlsx', attachment_filename="completed.xlsx")
